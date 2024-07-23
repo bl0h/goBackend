@@ -19,7 +19,7 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer {
 		addr: addr,
 		db:   db,
 	}
-}
+}  
 
 func (s *APIServer) Run() error {
 	router := mux.NewRouter()
