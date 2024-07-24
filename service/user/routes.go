@@ -7,6 +7,7 @@ import (
 	"github.com/bl0h/goBackend/service/user/auth"
 	"github.com/bl0h/goBackend/types"
 	"github.com/bl0h/goBackend/utils"
+	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
 )
 
@@ -39,7 +40,10 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//validate the payload
-
+	if err := utils.Validate.Struct(payload); err != nil {
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload &v", errors))
+	}
 	//check if the user exists
 	_, err := h.store.GetUserByEmail(payload.Email)
 	if err == nil {
